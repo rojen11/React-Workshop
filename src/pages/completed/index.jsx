@@ -1,10 +1,10 @@
 import PageLayout from "../../components/Layout/PageLayout";
 import Tasks from "../../components/Tasks";
 
-export default function Completed() {
+export default function Completed(props) {
   return (
     <PageLayout title="Completed">
-      <Tasks />
+        <Tasks {...props} section="Completed" />
     </PageLayout>
   );
 }

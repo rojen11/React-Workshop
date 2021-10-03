@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import All from "./pages/all";
@@ -24,8 +24,23 @@ function App() {
   }
 
   function editTask(id, task) {
-    setTasks(tasks.map((t) => (t.id === id ? { ...t, task } : t)));
+    setTasks(tasks.map((t) => (t.id === id ? { ...t, task: task } : t)));
   }
+
+  // Page load
+  useEffect(() => {
+    const localTasks = localStorage.getItem("tasks");
+
+
+    if (localTasks !== undefined && localTasks !== null) {
+      setTasks(JSON.parse(localTasks));
+    }
+  }, []);
+
+  // update on tasks
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <div className="bg-background h-screen w-screen">
@@ -33,13 +48,31 @@ function App() {
         <Layout>
           <Switch>
             <Route exact path="/">
-              <All />
+              <All
+                addTask={addTask}
+                editTask={editTask}
+                completeTask={completeTask}
+                removeTask={removeTask}
+                tasks={tasks}
+              />
             </Route>
             <Route exact path="/pending">
-              <Pending />
+              <Pending
+                addTask={addTask}
+                editTask={editTask}
+                completeTask={completeTask}
+                removeTask={removeTask}
+                tasks={tasks}
+              />
             </Route>
             <Route exact path="/completed">
-              <Completed />
+              <Completed
+                addTask={addTask}
+                editTask={editTask}
+                completeTask={completeTask}
+                removeTask={removeTask}
+                tasks={tasks}
+              />
             </Route>
           </Switch>
         </Layout>
